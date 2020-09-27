@@ -1,0 +1,95 @@
+.ticket-container {
+  padding: 1em;
+  border: darkgray 2px solid;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.author {
+  text-align: start;
+  font-size: 1em;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.delete {
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 1px;
+}
+
+.delete:hover {
+  background-color: red;
+  cursor: pointer;
+  color: white;
+}
+
+.description {
+  margin-top: 0.5em;
+  text-align: start;
+}
+
+.arrows {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.arrows .arrow-container {
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.arrows .arrow-container:hover {
+  background: #46a049;
+  cursor: pointer;
+}
+
+.arrows .arrow-container:hover i {
+  color: white;
+}
+
+@media screen and (max-width: 600px) {
+  .description {
+    font-size: 12px;
+  }
+
+  .ticket-container {
+    padding: 3px;
+    margin-top: 0.5em;
+    border: darkgray 2px solid;
+  }
+
+  .author {
+    font-size: 12px;
+  }
+
+  .delete {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 280px) {
+  .author {
+    font-size: 8px;
+  }
+
+  .delete {
+    font-size: 8px;
+  }
+
+  .description {
+    font-size: 10px;
+  }
+
+  .arrows .arrow {
+    border-width: 0 2px 2px 0;
+    padding: 2px;
+  }
+}

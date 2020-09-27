@@ -1,96 +1,120 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
-const { status } = require('../../utils/constants');
+const checkObjectId = require('../../middleware/check-object-id');
+const { OPEN, IN_PROGRESS, RESOLVED } = require('../../utils/constants');
 
 // Models
 const Ticket = require('../../models/Ticket');
+const User = require('../../models/User');
 
 // @route   POST api/tickets
 // @desc    Add new ticket
 // @access  Private
-router.post('/', [auth], (req, res) => {
-  const { description } = req.body;
-  if (!description) {
-    return res.status(400).json({ msg: 'You must enter a description!' });
+router.post(
+  '/',
+  [auth, [check('description', 'Description is required').not().isEmpty()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = await User.findById(req.user.id).select('-password');
+
+      const newTicket = new Ticket({
+        description: req.body.description,
+        author: user.name,
+        user: req.user.id,
+        status: OPEN,
+      });
+
+      const ticket = await newTicket.save();
+      res.json(ticket);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
   }
-
-  const { user } = req;
-  const ticket = new Ticket({
-    _userId: user.id,
-    description,
-    status: status.OPEN,
-  });
-
-  ticket
-    .save()
-    .then((savedTicket) => res.status(200).json({ ticket: savedTicket }))
-    .catch((err) =>
-      res
-        .status(500)
-        .json({ msg: 'Something went wrong when trying to add the new ticket' })
-    );
-});
+);
 
 // @route   GET api/tickets
 // @desc    Get all tickets
 // @access  Private
-router.get('/', [auth], (req, res) => {
-  Ticket.find({})
-    .then((tickets) => {
-      return res.status(200).json({ tickets });
-    })
-    .catch((err) =>
-      res.status(500).json({
-        msg: 'Something went wrong when trying to get all the tickets',
-      })
-    );
+router.get('/', [auth], async (req, res) => {
+  try {
+    const tickets = await Ticket.find().sort({ registrationDate: -1 });
+    res.json(tickets);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
-// @route   POST api/tickets/update-status
+// @route   PUT api/tickets/update-status
 // @desc    Update status of a ticket
 // @access  Private
-router.post('/update-status', [auth], (req, res) => {
-  const { ticketId, newStatus } = req.body;
-  if (!newStatus) {
-    return res.status(400).json({ msg: 'You must enter a status' });
-  }
+router.post(
+  '/update-status/:id',
+  [
+    auth,
+    checkObjectId('id'),
+    [check('status', 'A status must be given!').not().isEmpty()],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  if (
-    !(
-      newStatus === status.OPEN ||
-      newStatus === status.RESOLVED ||
-      newStatus === status.IN_PROGRESS
-    )
-  ) {
-    return res.status(400).json({
-      msg:
-        'Status not supported. Currently supported status are: Open, In Progress, Resolved',
-    });
-  }
+    try {
+      const { status } = req.body;
+      if (!(status === OPEN || status === IN_PROGRESS || status === RESOLVED)) {
+        return res.status(400).json({ errors: [{ msg: 'Invalid status' }] });
+      }
 
-  Ticket.findById(ticketId, (err, foundTicket) => {
-    if (!foundTicket) {
+      const ticket = await Ticket.findById(req.params.id);
+      if (!ticket) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Ticket does not exist' }] });
+      }
+
+      ticket.status = status;
+      await ticket.save();
+      return res.status(200).json({ msg: 'Ticket status updated' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route    DELETE api/tickets/:id
+// @desc     Delete ticket
+// @access   Private
+router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
+  try {
+    const ticket = await Ticket.findById(req.params.id);
+
+    if (!ticket) {
       return res
         .status(404)
-        .json({ msg: 'Could not find a ticket with the given id' });
+        .json({ errors: [{ msg: 'Ticket does not exist' }] });
     }
 
-    if (foundTicket.status === newStatus) {
-      return res.status(400).json({ msg: 'The ticket has the same status' });
+    if (ticket.user.toString() !== req.user.id) {
+      return res.status(401).json({ errors: [{ msg: 'User not authorized' }] });
     }
 
-    foundTicket.status = newStatus;
-
-    foundTicket
-      .save()
-      .then((savedTicket) => res.status(200).json({ ticket: savedTicket }))
-      .catch((err) =>
-        res.status(500).json({
-          msg: 'Something went wrong when trying to save the modified ticket',
-        })
-      );
-  });
+    await ticket.remove();
+    return res.status(200).json({ msg: 'Ticket removed' });
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).send('Server Error');
+  }
 });
 
 module.exports = router;

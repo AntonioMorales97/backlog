@@ -1,9 +1,9 @@
-const status = {
-  OPEN: 'Open',
-  IN_PROGRESS: 'In Progress',
-  RESOLVED: 'Resolved',
-};
+const OPEN = 'OPEN';
+const IN_PROGRESS = 'IN_PROGRESS';
+const RESOLVED = 'RESOLVED';
 
 module.exports = {
-  status,
+  OPEN,
+  IN_PROGRESS,
+  RESOLVED,
 };

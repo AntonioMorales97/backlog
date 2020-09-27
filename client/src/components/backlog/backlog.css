@@ -1,0 +1,33 @@
+.backlog-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.backlog-section {
+  text-align: center;
+  width: 33%;
+}
+
+.backlog-section + .backlog-section {
+  border-left: solid 2px black;
+}
+
+.ticket-section {
+  padding: 1em;
+}
+
+@media screen and (max-width: 600px) {
+  .ticket-section {
+    padding: 9px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .backlog-section h1 {
+    font-size: 12px;
+  }
+
+  .ticket-section {
+    padding: 5px;
+  }
+}
