@@ -1,6 +1,7 @@
 import { AUTH_ERROR, LOGIN_SUCCESS, LOGOUT, USER_LOADED } from '../actionTypes';
 
 const initialState = {
+  token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
   user: null,
@@ -31,6 +32,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         loading: false,
         user: null,
+        token: null,
       };
     default:
       return state;
