@@ -33,7 +33,7 @@ const ticketAdminUpdatedText = (userName) => {
 // @route   POST api/tickets
 // @desc    Add new ticket
 // @access  Private Admin
-router.post('/', [authAdmin], async (req, res) => {
+router.post('/', [auth], async (req, res) => {
   const { description, assignee } = req.body;
 
   if (!description || description.length === 0) {
