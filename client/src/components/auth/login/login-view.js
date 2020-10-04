@@ -29,6 +29,7 @@ const LoginView = ({
             name='email'
             value={email}
             onChange={onChange}
+            autoComplete='email'
             required
           />
         </div>
@@ -39,6 +40,7 @@ const LoginView = ({
             name='password'
             value={password}
             onChange={onChange}
+            autoComplete='current-password'
             minLength='6'
           />
         </div>

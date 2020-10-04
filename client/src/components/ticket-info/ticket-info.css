@@ -1,0 +1,14 @@
+.history {
+  height: 250px;
+  overflow-y: auto;
+}
+
+.event {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 700px) {
+  .event {
+    font-size: 14px;
+  }
+}

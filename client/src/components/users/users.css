@@ -1,0 +1,8 @@
+.trash:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.active {
+  cursor: pointer;
+}

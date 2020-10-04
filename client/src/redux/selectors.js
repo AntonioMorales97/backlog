@@ -28,3 +28,8 @@ export const getInProgressTickets = (store) =>
 
 export const getResolvedTickets = (store) =>
   getTicketsList(store).filter((ticket) => ticket.status === RESOLVED);
+
+export const getUsersState = (store) => store.users;
+
+export const getUsersList = (store) =>
+  getUsersState(store) ? getUsersState(store).users : [];

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import './ticket-modal.css';
 
@@ -6,6 +6,8 @@ const TicketModalView = ({
   isOpen,
   openModal,
   closeModal,
+  assignee,
+  description,
   innerRef,
   onChange,
   onSubmit,
@@ -22,35 +24,38 @@ const TicketModalView = ({
     );
   }
   return (
-    <Fragment>
-      <div className='dark-overlay' />
-      <div className='center'>
-        <div ref={innerRef} className='ticket-form-container'>
-          <div className='header-section'>
-            <h2>Add ticket</h2>
-            <h2 className='close-modal' onClick={closeModal}>
-              &times;
-            </h2>
-          </div>
-          <form className='form' onSubmit={onSubmit}>
-            <textarea
+    <div className='modal-container'>
+      <div ref={innerRef} className='ticket-form-container'>
+        <h1 className='lead text-primary'>
+          <i className='fas fa-ticket-alt' /> Add Ticket
+        </h1>
+        <form className='form' onSubmit={onSubmit}>
+          <div className='form-group'>
+            <input
               type='text'
+              placeholder='Assignee name (optional)'
+              name='assignee'
+              onChange={onChange}
+              value={assignee}
+            />
+          </div>
+          <div className='form-group'>
+            <textarea
+              className='ticket-description'
               placeholder='Enter a description'
               name='description'
               onChange={onChange}
+              value={description}
               required
-              className='ticket-description'
             />
-            <input
-              type='submit'
-              className='btn btn-primary'
-              id='add-ticket-btn'
-              value='Add'
-            />
-          </form>
-        </div>
+          </div>
+          <input type='submit' className='btn btn-primary w-100' value='Add' />
+        </form>
+        <button className='btn btn-danger w-100 mt-1' onClick={closeModal}>
+          Close
+        </button>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

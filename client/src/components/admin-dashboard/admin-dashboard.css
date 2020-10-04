@@ -1,0 +1,41 @@
+.user-section {
+  display: flex;
+  width: 100%;
+}
+
+.col {
+  flex: 1;
+}
+
+.register {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  height: 340px;
+}
+
+.users {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  height: 340px;
+  overflow: auto;
+}
+
+.col + .col {
+  border-left: 1px solid black;
+}
+
+@media screen and (max-width: 600px) {
+  .user-section {
+    display: block;
+  }
+
+  .users {
+    border-top: 0;
+  }
+
+  .register {
+    border-right: 1px solid black;
+  }
+}

@@ -1,24 +1,38 @@
-.center-screen {
-  justify-content: center;
-  align-items: center;
-  display: flex;
+.modal-container {
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 60%;
-  position: absolute;
+  overflow: auto;
+  padding-top: 80px;
 }
 
 .confirm-dialog-container {
-  position: relative;
   background: white;
   box-shadow: 0px 5px 50px 1px white;
   border: 1px black solid;
+  width: 80%;
+  max-width: 400px;
   padding: 3px;
-  z-index: 101;
+  margin: auto;
+  z-index: 1;
 }
 
 .action-section {
   margin-top: 5px;
   margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 380px) {
+  .action-section .btn {
+    font-size: 12px;
+  }
 }

@@ -1,14 +1,37 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef, useEffect, useCallback } from 'react';
+import { disableBodyScroll, enableBodyScroll } from '../../utils/bodyScroll';
 
 import './confirm-dialog.css';
 
 const ConfirmDialog = (props) => {
+  const node = useRef();
   const { title, children, setOpen, onConfirm } = props;
+
+  const handleClick = useCallback(
+    (e) => {
+      if (node.current.contains(e.target)) {
+        return;
+      }
+
+      setOpen(false);
+    },
+    [node, setOpen]
+  );
+
+  useEffect(() => {
+    disableBodyScroll();
+    document.addEventListener('mousedown', handleClick);
+    return () => {
+      enableBodyScroll();
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [handleClick]);
+
   return (
     <Fragment>
-      <div className='dark-overlay' />
-      <div className='center-screen'>
+      <div className='modal-container'>
         <div
+          ref={node}
           className='confirm-dialog-container'
           onClose={() => setOpen(false)}
         >

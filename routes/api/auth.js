@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const auth = require('../../middleware/auth');
+const { auth } = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const config = require('config');
 
@@ -10,7 +10,7 @@ const User = require('../../models/User');
 
 // @route    GET api/auth
 // @desc     Get user by token
-// @access   Private
+// @access   Private All
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -39,7 +39,7 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      let user = await User.findOne({ email });
+      const user = await User.findOne({ email });
 
       if (!user) {
         return res
@@ -55,16 +55,29 @@ router.post(
           .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
+      if (!user.active) {
+        return res.status(400).json({
+          errors: [
+            {
+              msg:
+                'User is not active and cannot longer login until activated.',
+            },
+          ],
+        });
+      }
+
       const payload = {
         user: {
           id: user.id,
+          role: user.role,
+          name: user.name,
         },
       };
 
       jwt.sign(
         payload,
         config.get('jwtSecret'),
-        { expiresIn: '5 days' },
+        { expiresIn: '8h' },
         (err, token) => {
           if (err) throw err;
           res.json({ token });

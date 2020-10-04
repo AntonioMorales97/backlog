@@ -5,7 +5,9 @@ import {
   SET_TICKET_RESOLVED,
   DELETE_TICKET,
   GET_TICKETS,
+  GET_TICKET,
   TICKET_ERROR,
+  UPDATE_TICKET,
 } from '../actionTypes';
 import { OPEN, IN_PROGRESS, RESOLVED } from '../../utils/constants';
 
@@ -18,11 +20,23 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case GET_TICKET: {
+      return {
+        ...state,
+        ticket: action.payload,
+      };
+    }
     case GET_TICKETS: {
       return {
         ...state,
         tickets: action.payload,
         loading: false,
+      };
+    }
+    case UPDATE_TICKET: {
+      return {
+        ...state,
+        ticket: action.payload,
       };
     }
     case ADD_TICKET: {

@@ -7,10 +7,6 @@ const TicketSchema = new Schema({
     required: true,
     ref: 'User',
   },
-  author: {
-    type: String,
-    required: true,
-  },
   description: {
     type: String,
     required: true,
@@ -19,6 +15,17 @@ const TicketSchema = new Schema({
     type: String,
     required: true,
   },
+  assignee: {
+    type: String,
+  },
+  history: [
+    {
+      event: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   registrationDate: {
     type: Date,
     required: true,

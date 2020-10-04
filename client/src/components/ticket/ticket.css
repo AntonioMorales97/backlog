@@ -1,6 +1,7 @@
 .ticket-container {
   padding: 1em;
   border: darkgray 2px solid;
+  margin-bottom: 2px;
 }
 
 .ticket-header {
@@ -8,13 +9,24 @@
   justify-content: space-between;
 }
 
-.author {
+.assignee {
   text-align: start;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: bold;
   opacity: 0.7;
 }
 
+.trash:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.cog:hover {
+  color: grey;
+  cursor: pointer;
+}
+
+/* Deprecated */
 .delete {
   font-size: 1em;
   font-weight: bold;
@@ -22,6 +34,7 @@
   padding: 1px;
 }
 
+/* Deprecated */
 .delete:hover {
   background-color: red;
   cursor: pointer;
@@ -76,10 +89,11 @@
 }
 
 @media screen and (max-width: 280px) {
-  .author {
+  .assignee {
     font-size: 8px;
   }
 
+  /* Deprecated */
   .delete {
     font-size: 8px;
   }
