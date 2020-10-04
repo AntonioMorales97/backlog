@@ -35,7 +35,7 @@ const ConfirmDialog = (props) => {
           className='confirm-dialog-container'
           onClose={() => setOpen(false)}
         >
-          <h1>{title}</h1>
+          <h1 id='confirm-title'>{title}</h1>
           <div>{children}</div>
           <div className='action-section'>
             <button
