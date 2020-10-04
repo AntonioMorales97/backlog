@@ -201,4 +201,50 @@ router.put(
   }
 );
 
+// @route    POST api/users/admin
+// @desc     Register admin
+// @access   None
+/*
+router.post('/admin', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    let user = await User.findOne({ email });
+
+    if (user) {
+      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+    }
+
+    user = new User({
+      name,
+      email,
+      password,
+      role: ROLE_ADMIN,
+      active: true,
+    });
+
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(password, salt);
+
+    await user.save();
+
+    const savedUser = {
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      active: user.active,
+      registrationDate: user.registrationDate,
+      __v: user.__v,
+    };
+
+    res.json({ msg: 'User registered successfully', user: savedUser });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+*/
+
 module.exports = router;
