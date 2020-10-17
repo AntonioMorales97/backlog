@@ -44,6 +44,8 @@
 .description {
   margin-top: 0.5em;
   text-align: start;
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
 .arrows {
